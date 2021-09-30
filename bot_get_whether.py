@@ -33,9 +33,10 @@ owm = OWM(API_TOKEN, config = config())
 
 whettrrt = {}
 
-
+""" Класс запроса получения информации о погоде"""
 class Whether:
 
+    """ Функция получения погоды по результату поиска города"""
     @staticmethod
     def get_whther_from_name_sity(sity):
         try:
@@ -46,7 +47,8 @@ class Whether:
             return f"В {sity} сейчас {status}, температура воздуха = {(weather.temp['temp'] - 273):.0f}"
         except Exception:
             return None
-
+        
+""" Функция получения погоды по результату поиска местоположения (геолокация) """
     @staticmethod
     def get_whther_from_geo_data(lat, lon):
         get_Weather = owm.weather_manager().weather_at_coords(lat, lon)
@@ -55,6 +57,7 @@ class Whether:
         temp = get_Weather.weather.temp
         return f"В {place} сейчас {status}, температура воздуха = {(temp['temp'] - 273):.0f}"
 
+""" Декоратор запуска бота(приветствие), создание кнопок, отправления соответсвующих сообщений """
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def get_user_info(message):
@@ -67,11 +70,11 @@ def get_user_info(message):
                                       f'какую информацию вы желаете получить?', reply_markup=main_menu)
     print(f"{message.from_user.first_name} {message.from_user.last_name} начала использовать бота")
 
-
+""" Декоратор приема и отправки сообщений """
 @bot.message_handler(content_types=['text', 'location'])
 def get_txt(message):
     if message.text == 'МОЙ ID':
-        bot.send_message(message.chat.id, f"{message.from_user.id}")
+        bot.send_message(message.chat.id, f"{message.from_user.id}") 
     elif message.text == 'Время':
         bot.send_message(message.chat.id, time.strftime('%H'':''%M'':''%S'))
     elif message.text == 'Погода':
